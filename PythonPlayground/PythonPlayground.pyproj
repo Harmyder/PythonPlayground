@@ -22,7 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="bspline.py">
+    <Compile Include="bsplineWithOptim.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="bsplineWoOptim.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />

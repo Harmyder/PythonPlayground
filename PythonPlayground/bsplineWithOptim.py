@@ -2,19 +2,22 @@ import numpy as np
 import matplotlib.ticker as tck
 import pylab as pl
 
-# more efficient version with memoization and exploiting of triangular structure for nonzero basis elements
-class BSpline:
-    def __init__(self, knots, points, degree):
+# Efficient version with memoization and exploiting of triangular structure for nonzero basis elements
+class BSplineBaseFuncs:
+    def __init__(self, knots, degree):
         self.knots_ = knots
-        self.points_ = points
         self.degree_ = degree
 
     def getKnots(self): return self.knots_
-    def getPoints(self): return self.points_
     def getDegree(self): return self.degree_
+
+    def getKnotsExtent(self): return self.knots_[-1] - self.knots_[0]
 
     # expects knot vector for clamped spline, so first and last (degree+1) elems are zeros
     def findSpan(self, t):
+        # span [u_i, u_{i+1}] never riches its end, so for the last span we need to also handle u_{i+1}
+        if (t == self.knots_[-1]):
+            return self.knots_.size - self.degree_ - 2;
         return np.searchsorted(self.knots_[self.degree_:self.knots_.size-self.degree_], t, side='right') + self.degree_ - 1
 
     def computeBase(self, spanBack, t):
@@ -35,6 +38,13 @@ class BSpline:
                 bases[self.degree_-minus] = left + right
         return bases    
 
+class BSpline(BSplineBaseFuncs):
+    def __init__(self, knots, points, degree):
+        super().__init__(knots, degree)
+        self.points_ = points
+
+    def getPoints(self): return self.points_
+
     def computePoint(self, t):
         spanBack = self.findSpan(t)
         bases = self.computeBase(spanBack, t)
@@ -53,11 +63,10 @@ class Span:
 # helper function
 def fill(evaluator, count):
     begin = evaluator.getKnots()[0]
-    extent = evaluator.getKnots()[-1] - begin
-    step = float(extent) / count
+    step = float(evaluator.getKnotsExtent()) / count
     res = []
     spans = []
-    for i in range(0, count):
+    for i in range(0, count+1):
         x = begin + i * step
         s = evaluator.findSpan(x)
         if len(spans) > 0 and spans[-1].span == s:
@@ -65,8 +74,6 @@ def fill(evaluator, count):
         else:
             spans.append(Span(s, 1))
         res.append(evaluator.computePoint(x))
-    res.append(evaluator.getPoints()[-1])
-    spans.append(Span(s, 1))
     return res, spans
 
 # Usage example

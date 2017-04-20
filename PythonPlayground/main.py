@@ -1,8 +1,7 @@
 import numpy as np
-from mpl_toolkits.mplot3d import axes3d
-import matplotlib.pyplot as plt
 
 import bsplineWithOptim as bspline
+import bsplineSurface
 
 # data for different shapes
 def twinHillsData():
@@ -18,17 +17,18 @@ def twinHillsData():
 def loopData():
     knots   = np.array([ 0, 0, 0, 0, 0.2, 0.4, 0.6, 0.8, 1, 1, 1, 1])
     offsets = np.array([ 0, 2, 4, 3,   1,   0,   2,   4])
-    heights = np.array([ 1, 2, 4, 5,   5,   4,   2,   1])
+    heights = np.array([ 1, 2, 3, 5,   5,   3,   2,   1])
     points  = np.dstack((offsets, heights))
     degree = 3
     return knots, points[0], degree
 
 
-
+bsplineSurface.demo()
+#bspline.demo(loopData)
 
 #knots = np.array([ 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5])
-knots = np.array([0, 0, 0, 0, 1, 2, 2, 2, 3, 3, 3, 3])
-bspline.demoBases(knots, 2)
+#knots = np.array([0, 0, 0, 0, 1, 2, 2, 2, 3, 3, 3, 3])
+#bspline.demoBases(knots, 2)
 
 #def basisFuns1():
 #    gray = '#eeeeee'

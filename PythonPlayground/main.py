@@ -2,6 +2,8 @@ import numpy as np
 
 import bsplineWithOptim as bspline
 import bsplineSurface
+import heat2d
+import epsTest
 
 # data for different shapes
 def twinHillsData():
@@ -23,7 +25,9 @@ def loopData():
     return knots, points[0], degree
 
 
-bsplineSurface.demo()
+epsTest.epsTest()
+#heat2d.demo()
+#bsplineSurface.demo()
 #bspline.demo(loopData)
 
 #knots = np.array([ 0, 0, 0, 1, 2, 3, 4, 4, 5, 5, 5])

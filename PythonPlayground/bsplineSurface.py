@@ -55,7 +55,10 @@ def hillsData():
     for i in range(0,side):
         for j in range(0,side):
             points[i][j] = np.array([i,j,0])
-    points[side//2][1][2] = points[side//2][side-2][2] = points[1][side//2][2] = points[side-2][side//2][2] = 3
+    points[side//2][1][2] = 1
+    points[side//2][side-2][2] = 1.5
+    points[1][side//2][2] = 2
+    points[side-2][side//2][2] = 2.5
     return uKnots, vKnots, points, 3
 
 def demo():
